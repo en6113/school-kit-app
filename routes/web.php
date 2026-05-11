@@ -1,16 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\CartController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\User\ProductController;
+use App\Http\Controllers\User\CategoryController;
+use App\Http\Controllers\User\CartController;
+use App\Http\Controllers\User\OrderController;
+use App\Http\Controllers\Vendor\ProductController as VendorProductController;
+use App\Http\Controllers\Vendor\CategoryController as VendorCategoryController;
 
 // 一般ユーザー用認証
-require __DIR__ . '/auth.php';
+require __DIR__ . '/user/auth.php';
 
 // 業者用認証
-require __DIR__ . '/vendor_auth.php';
+require __DIR__ . '/vendor/vendor_auth.php';
 
 /* --- 一般ユーザー専用（要ログイン） --- */
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -37,7 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 /* --- 業者専用（要ログイン） --- */
 Route::middleware('auth:vendor')->prefix('vendor')->name('vendor.')->group(function () {
-    Route::resource('categories', CategoryController::class);
+    Route::resource('categories', VendorCategoryController::class);
 
-    Route::resource('products', ProductController::class);
+    Route::resource('products', VendorProductController::class);
 });

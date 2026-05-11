@@ -1,48 +1,93 @@
-<form action="{{ route('vendor.products.store') }}" method="POST" enctype="multipart/form-data"
-    class="max-w-2xl bg-white p-6 rounded-lg shadow">
-    @csrf
-    <h2 class="text-xl font-bold mb-6 border-b pb-2">新規商品登録</h2>
-
-    <div class="mb-4">
-        <label class="block font-bold mb-1">カテゴリー（複数選択可）</label>
-        <div class="grid grid-cols-3 gap-2 border p-3 rounded">
-            @foreach($categories as $category)
-                <label class="flex items-center text-sm">
-                    <input type="checkbox" name="categories[]" value="{{ $category->id }}" class="mr-2">
-                    {{ $category->name }}
-                </label>
-            @endforeach
+<x-vendor-layout>
+    @if ($errors->any())
+        <div style="color: red;">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
         </div>
-    </div>
+    @endif
 
-    <div class="grid grid-cols-2 gap-4 mb-4">
-        <div>
-            <label class="block font-bold mb-1">商品名</label>
-            <input type="text" name="name" class="w-full border-gray-300 rounded" required>
-        </div>
-        <div>
-            <label class="block font-bold mb-1">価格</label>
-            <input type="number" name="price" class="w-full border-gray-300 rounded" required>
-        </div>
-    </div>
+    <x-slot name="title">商品登録</x-slot>
 
-    <div class="mb-4">
-        <label class="block font-bold mb-1">在庫数（基本）</label>
-        <input type="number" name="stock" class="w-full border-gray-300 rounded" required>
-    </div>
+    <div class="bg-white rounded-lg shadow-md p-6">
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">新規商品登録</h1>
 
-    <div class="mb-4">
-        <label class="block font-bold mb-1">商品説明</label>
-        <textarea name="description" rows="4" class="w-full border-gray-300 rounded"></textarea>
-    </div>
+        <form action="{{ route('vendor.products.store') }}" method="POST">
+            @csrf
+            
+            {{-- 商品名 --}}
+            <div class="mb-6">
+                <label for="name" class="block text-gray-700 font-medium mb-2">商品名</label>
+                <input type="text" id="name" name="name" value="{{ old('name') }}"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" required>
+                @error('name')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+                </div>
 
-    <div class="mb-6">
-        <label class="block font-bold mb-1">商品画像</label>
-        <input type="file" name="images[]" multiple class="w-full text-sm">
-        <p class="text-xs text-gray-500 mt-1">※複数選択可能です</p>
-    </div>
+            {{-- 価格 --}}
+            <div class="mb-4">
+                <label for="price" class="block text-gray-700 font-medium mb-2">価格</label>
+                <input type="number" id="price" name="price" value="{{ old('price') }}"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" required>
+                @error('price')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
 
-    <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700">
-        商品を登録する
-    </button>
-</form>
+            {{-- 在庫数 --}}
+            <div class="mb-4">
+                <label for="stock" class="block text-gray-700 font-medium mb-2">在庫数（基本）</label>
+                <input type="number" id="stock" name="stock" value="{{ old('stock') }}"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" required>
+                @error('stock')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            
+            {{-- 商品説明 --}}
+            <div class="mb-4">
+                <label for="description" class="block text-gray-700 font-medium mb-2">商品説明</label>
+                <textarea id="description" name="description" rows="4" class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500">{{ old('description') }}</textarea>
+                @error('description')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+            
+            {{-- 商品画像 --}}
+            <div class="mb-6">
+                <label for="images" class="block text-gray-700 font-medium mb-2">商品画像</label>
+                <input type="file" id="images" name="images[]" multiple class="w-full text-sm">
+                <p class="text-xs text-gray-500 mt-1">※複数選択可能です</p>
+                @error('images')
+                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            {{-- カテゴリー --}}
+            <div class="mb-6">
+                <label for="categories" class="block text-gray-700 font-medium mb-2">カテゴリー（複数選択可）</label>
+                <div class="grid grid-cols-3 gap-2 border p-3 rounded">
+                    @foreach($categories as $category)
+                        <label class="flex items-center text-sm">
+                            <input type="checkbox" name="category_id[]" value="{{ $category->id }}" class="mr-2">
+                            {{ $category->name }}
+                        </label>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- 保存ボタン --}}
+            <div class="flex space-x-4">
+                <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700">
+                    商品を登録する
+                </button>
+                <a href="{{ route('vendor.products.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                    キャンセル
+                </a>
+            </div>
+        </form>
+    </div>
+</x-vendor-layout>
