@@ -3,7 +3,7 @@
         <div class="bg-white rounded-lg shadow-md p-8">
             <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">ログイン（業者用）</h2>
 
-            <form method="POST" action="{{ route('login') }}" novalidate>
+            <form method="POST" action="{{ route('vendor.login') }}" novalidate>
                 @csrf
 
                 <div class="mb-4">
@@ -39,7 +39,7 @@
             </form>
 
             <p class="text-center text-sm text-gray-600 mt-4">
-                アカウントをお持ちでない方は<a href="{{ route('register') }}" class="text-blue-600 hover:underline">新規登録</a>
+                アカウントをお持ちでない方は<a href="{{ route('vendor.register') }}" class="text-blue-600 hover:underline">新規登録</a>
             </p>
         </div>
     </div>

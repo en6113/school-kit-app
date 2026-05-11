@@ -1,2 +1,5 @@
-{{-- この1行だけにします --}}
-@include('vendor.layouts.app')
+@extends('vendor.layouts.app')
+
+@section('content')
+    {{ $slot }}
+@endsection

@@ -3,7 +3,7 @@
         <div class="bg-white rounded-lg shadow-md p-8">
             <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">新規登録（業者用）</h2>
 
-            <form method="POST" action="{{ route('register') }}" novalidate>
+            <form method="POST" action="{{ route('vendor.register') }}" novalidate>
                 @csrf
 
                 <div class="mb-4">

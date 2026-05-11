@@ -4,7 +4,7 @@
     {{-- カテゴリー絞り込み中の場合に「解除」ボタンを表示 --}}
     @if(request('category'))
         <div class="mb-4">
-            <a href="{{ route('products.index') }}"
+            <a href="{{ route('vendor.products.index') }}"
                 class="text-sm text-gray-600 bg-gray-200 px-3 py-1 rounded-full hover:bg-gray-300">
                 ✕ カテゴリー絞り込みを解除
             </a>
@@ -31,7 +31,7 @@
                     <div class="flex flex-wrap gap-1 mb-2">
                         @if($product->item_type === 'product')
                             @foreach($product->categories as $category)
-                                <a href="{{ route('products.index', ['category' => $category->id]) }}"
+                                <a href="{{ route('vendor.products.index', ['category' => $category->id]) }}"
                                     class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded hover:bg-blue-200 transition">
                                     {{ $category->name }}
                                 </a>
@@ -53,7 +53,7 @@
 
                     <div class="flex justify-between items-center">
                         {{-- 詳細リンク --}}
-                        <a href="{{ route('products.show', $product->id) }}"
+                        <a href="{{ route('vendor.products.show', $product->id) }}"
                             class="text-blue-500 hover:underline text-sm">詳細を見る</a>
 
                         {{-- 編集リンク(業者のみ) --}}
