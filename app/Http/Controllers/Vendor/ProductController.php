@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductImage;
+use App\Models\Size;
 use App\Models\ProductSize;
 use App\Models\StarterKit;
 
@@ -27,7 +28,6 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        // クエリのベースを作成
         $productQuery = Product::query();
 
         // カテゴリーIDが送られてきた場合、そのカテゴリーを持つ商品のみに絞り込む
@@ -37,17 +37,9 @@ class ProductController extends Controller
             });
         }
 
-        $products = $productQuery->with(['categories', 'productImages', 'productSizes'])->get();
-        $products->each(fn($p) => $p->item_type = 'product');
+        $products = $productQuery->with(['categories', 'productImages', 'productSizes'])->orderBy('created_at', 'desc')->get();
 
-        //スターターキットクエリ
-        $kits = StarterKit::with(['products'])->get();
-        $kits->each(fn($k) => $k->item_type = 'starter_kit');
-
-        //両方を結合して、アイテムの種類でソート
-        $allProducts = $products->concat($kits)->sortBy('created_at');
-
-        return view('vendor.products.index', ['products' => $allProducts]);
+        return view('vendor.products.index', compact('products'));
     }
 
     /**
@@ -56,10 +48,10 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        $productSizes = ProductSize::all();
+        $sizes = Size::all();
         $starterKits = StarterKit::all();
 
-        return view('vendor.products.create', compact('categories', 'productSizes', 'starterKits'));
+        return view('vendor.products.create', compact('categories', 'sizes', 'starterKits'));
     }
 
     /**
@@ -70,7 +62,17 @@ class ProductController extends Controller
         $validated = $request->validated();
         $validated['vendor_id'] = auth()->id();
 
-        Product::create($validated);
+        $product = Product::create($validated);
+
+        //サイズ展開の保存（中間テーブルに保存する）
+        if ($request->has('product_sizes')) {
+            $product->sizes()->attach($request->product_sizes);
+        }
+
+        //カテゴリーの保存（中間テーブルに保存する）
+        if ($request->has('category_id')){
+            $product->categories()->attach($request->category_id);
+        }
 
         return redirect()->route('vendor.products.index')->with('success', '商品を作成しました。');
     }
@@ -80,22 +82,9 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        // 1. 商品を探す
-        $product = Product::with(['categories', 'productImages', 'productSizes'])->find($id);
+        $product = Product::with(['categories', 'productImages', 'productSizes.size'])->find($id);
 
-        if ($product) {
-            $product->item_type = 'product';
-        } else {
-            // 2. 商品で見つからなければスターターキットを探す
-            $product = StarterKit::with('products.productImages')
-                ->withCount('products')
-                ->findOrFail($id);
-
-            $product->item_type = 'starter_kit';
-        }
-
-        // 変数名を $product に統一してビューに渡す（既存のビューとの互換性のため）
-        return view('vendor.products.show', ['product' => $product]);
+        return view('vendor.products.show', compact('product'));
     }
 
     /**
@@ -103,12 +92,19 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('categories','sizes')->findOrFail($id);
         $categories = Category::all();
-        $productSizes = ProductSize::all();
         $starterKits = StarterKit::all();
 
-        return view('vendor.products.edit', compact('product', 'categories', 'productSizes', 'starterKits'));
+        //モデルのgetSizeTypeAttributeアクセサを使用
+        $type = $product->size_type;
+        $sizeOptions = $type
+            ? Size::where('type', $type)->get()
+            : collect();
+
+        $stocks = $product->productSizes->pluck('stock', 'size_id')->toArray();
+
+        return view('vendor.products.edit', compact('product','categories','starterKits','sizeOptions','stocks',));
     }
 
     /**
@@ -121,6 +117,22 @@ class ProductController extends Controller
         $validated['vendor_id'] = auth()->id();
 
         $product->update($validated);
+
+        // カテゴリーの更新（中間テーブルに保存）
+        if ($request->has('category_id')) {
+            $product->categories()->sync($request->category_id);
+        }
+
+        // サイズ別在庫の更新（中間テーブルに保存）在庫が入力されている（もしくは0）の場合のみ同期対象にする
+        if ($request->has('sizes')) {
+            $syncData = [];
+            foreach ($request->sizes as $sizeId => $stock) {
+                if (!is_null($stock)) {
+                    $syncData[$sizeId] = ['stock' => $stock];
+                }
+            }
+            $product->sizes()->sync($syncData);
+        }
 
         return redirect()->route('vendor.products.index')->with('success', '商品を更新しました。');
     }

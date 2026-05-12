@@ -12,7 +12,7 @@ class StarterKitSeeder extends Seeder
      */
     public function run(): void
     {
-        $kits = [
+        $Kits = [
             ['name' => '1年生スターターキット', 'description' => '新入生に必要な基本セットです'],
             ['name' => '2年生スターターキット', 'description' => '2年生で使うドリルやテスト、絵具道具やかけ算カードなどが含まれるセットです'],
             ['name' => '3年生スターターキット', 'description' => '3年生で使うドリルやテスト、習字道具やリコーダーが含まれるセットです'],
@@ -21,7 +21,7 @@ class StarterKitSeeder extends Seeder
             ['name' => '6年生スターターキット', 'description' => '6年生で使うドリルやテストが含まれるセットです'],
         ];
 
-        foreach ($kits as $kit) {
+        foreach ($Kits as $kit) {
             StarterKit::create($kit);
         }
     }

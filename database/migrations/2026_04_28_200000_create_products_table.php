@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->foreignId('vendor_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->integer('price');
-            $table->integer('stock');
+            $table->integer('total_stock')->default(0);
             $table->text('description')->nullable();
             $table->timestamps();
         });

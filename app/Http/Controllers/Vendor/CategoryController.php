@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Vendor;
 
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
@@ -14,7 +14,7 @@ class CategoryController extends Controller
     {
         $categories = Category::withCount('items')->orderBy('created_at', 'desc')->get();
 
-        return view('categories.index', compact('categories'));
+        return view('vendor.categories.index', compact('categories'));
     }
 
     /**
@@ -22,7 +22,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('categories.create');
+        return view('vendor.categories.create');
     }
 
     /**
@@ -32,7 +32,7 @@ class CategoryController extends Controller
     {
         Category::create($request->validated());
 
-        return redirect()->route('categories.index')
+        return redirect()->route('vendor.categories.index')
             ->with('success', 'カテゴリーを作成しました。');
     }
 
@@ -43,7 +43,7 @@ class CategoryController extends Controller
     {
         $category->load('items');
 
-        return view('categories.show', compact('category'));
+        return view('vendor.categories.show', compact('category'));
     }
 
     /**
@@ -51,7 +51,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('categories.edit', compact('category'));
+        return view('vendor.categories.edit', compact('category'));
     }
 
     /**
@@ -61,7 +61,7 @@ class CategoryController extends Controller
     {
         $category->update($request->validated());
 
-        return redirect()->route('categories.index')
+        return redirect()->route('vendor.categories.index')
             ->with('success', 'カテゴリーを更新しました。');
     }
 
@@ -70,15 +70,15 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        // カテゴリーに紐づくタスクがある場合は削除不可
-        if ($category->tasks()->count() > 0) {
-            return redirect()->route('categories.index')
-                ->with('error', 'タスクが紐づいているカテゴリーは削除できません。');
+        // カテゴリーに紐づく商品がある場合は削除不可
+        if ($category->products()->count() > 0) {
+            return redirect()->route('vendor.categories.index')
+                ->with('error', '商品が紐づいているカテゴリーは削除できません。');
         }
 
         $category->delete();
 
-        return redirect()->route('categories.index')
+        return redirect()->route('vendor.categories.index')
             ->with('success', 'カテゴリーを削除しました。');
     }
 }

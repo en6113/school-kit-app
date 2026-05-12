@@ -2,122 +2,31 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\ProductSize;
 
 class ProductSizeSeeder extends Seeder
 {
-
+    /**
+     * Run the database seeds.
+     */
     public function run(): void
     {
         $productSizes = [
-            [
-                'product_id' => 1,
-                'size' => '110',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 1,
-                'size' => '120',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 1,
-                'size' => '130',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 1,
-                'size' => '140',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 1,
-                'size' => '150',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 1,
-                'size' => '160',
-                'stock' => '50'
-            ],
-                        [
-                'product_id' => 1,
-                'size' => '170',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)18',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)18.5',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)19',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)19.5',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)20',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)20.5',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)21',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)21.5',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)22',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)22.5',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)23',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)23.5',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)24',
-                'stock' => '50'
-            ],
-            [
-                'product_id' => 2,
-                'size' => '(上靴用)24.5',
-                'stock' => '50'
-            ],
+            ['product_id' => 2, 'size_ids' => range(1, 7)],
+            ['product_id' => 3, 'size_ids' => range(1, 7)],
+            ['product_id' => 4, 'size_ids' => range(8, 21)],
         ];
 
-        ProductSize::insert($productSizes);
+        foreach ($productSizes as $productSize) {
+            foreach ($productSize['size_ids'] as $size_id) {
+                ProductSize::create([
+                    'product_id' => $productSize['product_id'],
+                    'size_id' => $size_id,
+                    'stock' => 50,
+                ]);
+            }
+        }
     }
 }
