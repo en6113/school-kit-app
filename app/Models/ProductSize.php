@@ -2,10 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProductSize extends Model
 {
@@ -13,15 +12,23 @@ class ProductSize extends Model
 
     protected $fillable = [
         'product_id',
-        'size',
+        'size_id',
         'stock',
     ];
 
     /**
-     * この商品サイズが属する商品を取得
+     * このサイズが属する商品を取得
      */
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * サイズ名を取得
+     */
+    public function size(): BelongsTo
+    {
+        return $this->belongsTo(Size::class,'size_id');
     }
 }

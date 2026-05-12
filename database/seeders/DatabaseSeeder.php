@@ -9,7 +9,7 @@ use App\Models\Vendor;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\ProductImage;
-use App\Models\ProductSize;
+use App\Models\Size;
 use App\Models\StarterKit;
 use App\Models\StarterKitItem;
 use App\Models\Cart;
@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             ProductSeeder::class,
             ProductImageSeeder::class,
+            SizeSeeder::class,
             ProductSizeSeeder::class,
             StarterKitSeeder::class,
             StarterKitItemSeeder::class,

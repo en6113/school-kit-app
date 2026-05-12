@@ -21,7 +21,7 @@ class Product extends Model
         'vendor_id',
         'name',
         'price',
-        'stock',
+        'total_stock',
         'description',
     ];
 
@@ -42,19 +42,46 @@ class Product extends Model
     }
 
     /**
+     * 商品のカテゴリーが衣服または履物だった場合にサイズタイプ（clothing or shoes）を取得
+     */
+    public function getSizeTypeAttribute()
+    {
+        $categoryNames = $this->categories->pluck('name')->toArray();
+
+        if (in_array('履物', $categoryNames)) {
+            return 'shoes';
+        }
+
+        if (in_array('衣服', $categoryNames)) {
+            return 'clothing';
+        }
+
+        return null;
+    }
+
+    /**
+     * この商品のサイズ展開(在庫数)を取得
+     */
+    public function productSizes(): HasMany
+    {
+        return $this->hasMany(ProductSize::class);
+    }
+
+    /**
+     * この商品に関連するサイズを取得
+     */
+    public function sizes(): BelongsToMany
+    {
+        // 第2引数は中間テーブル名、第3はProduct側の外部キー、第4はSize側の外部キー
+        return $this->belongsToMany(Size::class, 'product_sizes', 'product_id', 'size_id');
+    }
+
+    /**
      * この商品の画像を取得
      */
     public function productImages(): HasMany
     {
         return $this->hasMany(ProductImage::class);
-    }
-
-    /**
-     * この商品のサイズ展開を取得
-     */
-    public function productSizes(): HasMany
-    {
-        return $this->hasMany(ProductSize::class);
     }
 
     /**

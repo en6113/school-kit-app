@@ -12,13 +12,13 @@
     @endif
     
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @foreach($products as $product)
+        @forelse($products as $product)
             <div class="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
                 <!-- 商品画像（最初の1枚を表示） -->
                 <div class="h-48 bg-gray-200 flex items-center justify-center">
 
                     {{-- 画像表示のロジック --}}
-                    @if($product->item_type === 'product' && isset($product->productImages) && $product->productImages->isNotEmpty())
+                    @if(isset($product->productImages) && $product->productImages->isNotEmpty())
                         <img src="{{ asset('storage/' . $product->productImages->first()->image_url) }}"
                             class="w-full h-full object-cover">
                     @else
@@ -27,45 +27,64 @@
                 </div>
 
                 <div class="p-4">
-                    <!-- カテゴリー表示(商品の時のみ) -->
+                    <!-- カテゴリー表示 -->
                     <div class="flex flex-wrap gap-1 mb-2">
-                        @if($product->item_type === 'product')
+                        @if(isset($product->categories) && count($product->categories) > 0)
                             @foreach($product->categories as $category)
                                 <a href="{{ route('vendor.products.index', ['category' => $category->id]) }}"
                                     class="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded hover:bg-blue-200 transition">
                                     {{ $category->name }}
                                 </a>
                             @endforeach
-                        @else
-                            <span class="bg-orange-100 text-orange-800 text-xs px-2 py-0.5 rounded">セット商品</span>
                         @endif
                     </div>
 
                     <h2 class="font-bold text-lg mb-1">{{ $product->name }}</h2>
                     <p class="text-red-600 font-semibold">¥{{ number_format($product->price) }}</p>
 
-                    {{-- 在庫表示（商品の時のみ表示） --}}
-                    @if($product->item_type === 'product')
-                        <p class="text-sm text-gray-500 mb-4">在庫: {{ $product->stock }}</p>
-                    @else
-                        <p class="text-sm text-gray-500 mb-4">{{ $product->products->count() }}点の商品セット</p>
-                    @endif
+                    {{-- 在庫表示 --}}
+                        <div class="text-sm text-gray-500 mb-4">
+                            @if($product->productSizes->count() > 1)
+                                {{-- サイズ展開がある場合 --}}
+                                <p class="text-sm text-gray-500 font-medium">
+                                    サイズごとの在庫数をご確認ください
+                                </p>
+                            @else
+                                {{-- サイズ展開がない（通常の商品）場合 --}}
+                                <p class="text-sm text-gray-500">
+                                    在庫: {{ $product->total_stock }}
+                                </p>
+                            @endif
+                            </div>
 
                     <div class="flex justify-between items-center">
                         {{-- 詳細リンク --}}
                         <a href="{{ route('vendor.products.show', $product->id) }}"
                             class="text-blue-500 hover:underline text-sm">詳細を見る</a>
 
-                        {{-- 編集リンク(業者のみ) --}}
+                        {{-- 編集・削除リンク(業者のみ) --}}
                         @auth('vendor')
                             @if($product->vendor_id === auth('vendor')->id())
-                                <a href="{{ route('vendor.products.edit', $product->id) }}"
-                                    class="bg-gray-100 px-3 py-1 rounded text-sm hover:bg-gray-200">編集</a>
+                                <div class=""flex gap-2">
+                                    {{-- 編集 --}}
+                                    <a href="{{ route('vendor.products.edit', $product->id) }}"
+                                        class="bg-gray-100 px-3 py-1 rounded text-sm hover:bg-gray-200">編集</a>
+                                    {{-- 削除 --}}
+                                    <form action="{{ route('vendor.products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('本当に削除しますか？');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-gray-200">削除</button>
+                                    </form>
+                                </div>
                             @endif
                         @endauth
                     </div>
                 </div>
             </div>
-        @endforeach
+        @empty
+            <div class="col-span-full py-10 text-center text-gray-500">
+                登録されている商品がありません。
+            </div>
+        @endforelse
     </div>
 </x-vendor-layout>

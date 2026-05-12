@@ -39,8 +39,8 @@
 
             {{-- 在庫数 --}}
             <div class="mb-4">
-                <label for="stock" class="block text-gray-700 font-medium mb-2">在庫数（基本）</label>
-                <input type="number" id="stock" name="stock" value="{{ old('stock') }}"
+                <label for="total_stock" class="block text-gray-700 font-medium mb-2">在庫数（基本）※サイズ展開がある場合は０とご記入ください。</label>
+                <input type="number" id="total_stock" name="total_stock" value="{{ old('total_stock') }}"
                     class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500" required>
                 @error('stock')
                     <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
@@ -68,7 +68,7 @@
 
             {{-- カテゴリー --}}
             <div class="mb-6">
-                <label for="categories" class="block text-gray-700 font-medium mb-2">カテゴリー（複数選択可）</label>
+                <label for="categories" class="block text-gray-700 font-medium mb-2">カテゴリー（複数選択可）※サイズ展開がある場合は「衣服」か「履物」を必ず選択してください。</label>
                 <div class="grid grid-cols-3 gap-2 border p-3 rounded">
                     @foreach($categories as $category)
                         <label class="flex items-center text-sm">
