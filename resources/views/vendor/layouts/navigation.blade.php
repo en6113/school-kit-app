@@ -11,7 +11,7 @@
                 <a href="{{ route('vendor.products.create') }}" class="text-gray-300 hover:text-white text-sm font-medium">
                     ＋ 商品登録
                 </a>
-                <a href="{{ route('vendor.categories.create') }}" class="text-gray-300 hover:text-white text-sm font-medium">
+                <a href="{{ route('vendor.categories.index') }}" class="text-gray-300 hover:text-white text-sm font-medium">
                     ＋ カテゴリー登録
                 </a>
             </div>
