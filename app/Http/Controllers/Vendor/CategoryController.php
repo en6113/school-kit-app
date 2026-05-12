@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Vendor;
 
-use App\Http\Requests\CategoryRequest;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Vendor\CategoryRequest;
 use App\Models\Category;
 
 class CategoryController extends Controller
@@ -12,7 +13,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::withCount('items')->orderBy('created_at', 'desc')->get();
+        $categories = Category::withCount('products')->orderBy('created_at', 'desc')->get();
 
         return view('vendor.categories.index', compact('categories'));
     }
@@ -41,7 +42,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        $category->load('items');
+        $category->load('products');
 
         return view('vendor.categories.show', compact('category'));
     }
