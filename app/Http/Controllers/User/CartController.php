@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\CartDetail;
@@ -22,8 +23,7 @@ class CartController extends Controller
         // 2. ユーザーの「現在のカート」を取得、なければ作成
         $cart = Cart::firstOrCreate(['user_id' => $userId]);
 
-        // 3. すでに同じ商品（＋同じサイズ）がカートに入っているか確認
-        // Cart_detailsテーブル: cart_id, product_id, product_size_id
+        // 3. 同じ商品（＋同じサイズ）がカートに入っていないか確認(Cart_detailsテーブル)
         $cartDetail = CartDetail::where('cart_id', $cart->id)
             ->where('product_id', $request->product_id)
             ->where('product_size_id', $request->product_size_id)
@@ -44,7 +44,7 @@ class CartController extends Controller
         }
 
         // 4. カート一覧へリダイレクト
-        return redirect()->route('cart.index')->with('message', 'カートに商品を追加しました！');
+        return redirect()->route('cart.index')->with('success', '商品をカートに追加しました！');
     }
 
     public function index()
@@ -57,7 +57,7 @@ class CartController extends Controller
         // Cartモデルの合計金額を計算するgetTotalAmountメソッドを使用
         $totalAmount = $cart ? $cart->getTotalAmount() : 0;
 
-        return view('cart.index', compact('cart', 'totalAmount'));
+        return view('/user/cart.index', compact('cart', 'totalAmount'));
     }
 
     public function destroy(CartDetail $cartDetail)

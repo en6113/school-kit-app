@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\Vendor;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\Vendor\ProductRequest;
+use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
@@ -39,7 +38,7 @@ class ProductController extends Controller
 
         $products = $productQuery->with(['categories', 'productImages', 'productSizes'])->orderBy('created_at', 'desc')->get();
 
-        return view('vendor.products.index', compact('products'));
+        return view('products.index', compact('products'));
     }
 
     /**
@@ -74,7 +73,7 @@ class ProductController extends Controller
             $product->categories()->attach($request->category_id);
         }
 
-        return redirect()->route('vendor.products.index')->with('success', '商品を作成しました。');
+        return redirect()->route('products.index')->with('success', '商品を作成しました。');
     }
 
     /**
@@ -84,7 +83,7 @@ class ProductController extends Controller
     {
         $product = Product::with(['categories', 'productImages', 'productSizes.size'])->find($id);
 
-        return view('vendor.products.show', compact('product'));
+        return view('products.show', compact('product'));
     }
 
     /**
@@ -134,7 +133,7 @@ class ProductController extends Controller
             $product->sizes()->sync($syncData);
         }
 
-        return redirect()->route('vendor.products.index')->with('success', '商品を更新しました。');
+        return redirect()->route('products.index')->with('success', '商品を更新しました。');
     }
 
     /**
@@ -145,10 +144,10 @@ class ProductController extends Controller
         $product = Product::findOrFail($id);
 
         if($product->vendor_id !== auth()->id()) {
-            return redirect()->route('vendor.products.index')->with('error', 'この商品を削除する権限がありません。');
+            return redirect()->route('products.index')->with('error', 'この商品を削除する権限がありません。');
         }
 
         $product->delete();
-        return redirect()->route('vendor.products.index')->with('success', '商品を削除しました。');
+        return redirect()->route('products.index')->with('success', '商品を削除しました。');
     }
 }

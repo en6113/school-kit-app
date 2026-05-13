@@ -1,12 +1,10 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User\ProductController;
-use App\Http\Controllers\User\CategoryController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\OrderController;
-use App\Http\Controllers\Vendor\ProductController as VendorProductController;
-use App\Http\Controllers\Vendor\CategoryController as VendorCategoryController;
+use App\Http\Controllers\Vendor\CategoryController;
 
 // 一般ユーザー用認証
 require __DIR__ . '/user/auth.php';
@@ -14,14 +12,15 @@ require __DIR__ . '/user/auth.php';
 // 業者用認証
 require __DIR__ . '/vendor/vendor_auth.php';
 
+/* --- 一般ユーザーと業者共有（要ログイン） --- */
+Route::middleware(['auth:web,vendor', 'verified'])->group(function () {
+    //商品関連（一覧と詳細のみ）
+    Route::get('products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
+});
+
 /* --- 一般ユーザー専用（要ログイン） --- */
-Route::middleware(['auth', 'verified'])->group(function () {
-    //商品関連（ユーザーは一覧と詳細のみアクセス可能）
-    Route::resource('products', ProductController::class)->only(['index', 'show']);
-
-    //カテゴリ関連（ユーザーは一覧と詳細のみアクセス可能）
-    Route::resource('categories', CategoryController::class)->only(['index', 'show']);
-
+Route::middleware(['auth:web', 'verified'])->group(function () {
     // カート関連
     Route::resource('cart',CartController::class)->only(['index','store','destroy'])
         ->names([
@@ -39,7 +38,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 /* --- 業者専用（要ログイン） --- */
 Route::middleware('auth:vendor')->prefix('vendor')->name('vendor.')->group(function () {
-    Route::resource('categories', VendorCategoryController::class);
+    Route::resource('categories', CategoryController::class);
 
-    Route::resource('products', VendorProductController::class);
+    Route::resource('products', ProductController::class)->except(['index','show']);
 });
