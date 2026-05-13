@@ -45,6 +45,6 @@ class RegisteredController extends Controller
 
         Auth::guard('vendor')->login($vendor);
 
-        return redirect()->route('vendor.products.index');
+        return redirect()->route('products.index');
     }
 }

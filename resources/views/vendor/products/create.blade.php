@@ -84,7 +84,7 @@
                 <button type="submit" class="w-full bg-green-600 text-white font-bold py-2 rounded hover:bg-green-700">
                     商品を登録する
                 </button>
-                <a href="{{ route('vendor.products.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                <a href="{{ route('products.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
                     キャンセル
                 </a>
             </div>

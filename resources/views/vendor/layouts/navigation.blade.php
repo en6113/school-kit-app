@@ -2,7 +2,7 @@
     <div class="container mx-auto px-4 max-w-4xl">
         <div class="flex justify-between items-center py-4">
             {{-- ロゴ --}}
-            <a href="{{ route('vendor.products.index') }}" class="text-white text-xl font-bold hover:text-gray-300">
+            <a href="{{ route('products.index') }}" class="text-white text-xl font-bold hover:text-gray-300">
                 📋 スクールキットアプリ
             </a>
 

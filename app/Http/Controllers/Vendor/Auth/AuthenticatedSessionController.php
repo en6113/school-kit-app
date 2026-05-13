@@ -27,7 +27,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-        return redirect()->route('vendor.products.index');
+        return redirect()->route('products.index');
     }
 
     /**

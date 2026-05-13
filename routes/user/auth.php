@@ -11,6 +11,7 @@ use App\Http\Controllers\User\Auth\RegisteredUserController;
 use App\Http\Controllers\User\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+//ログイン前（新規登録・ログイン）
 Route::middleware('guest')->group(function () {
     Route::get('register', [RegisteredUserController::class, 'create'])
                 ->name('register');
@@ -35,6 +36,7 @@ Route::middleware('guest')->group(function () {
                 ->name('password.store');
 });
 
+//ログイン後
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
                 ->name('verification.notice');
