@@ -1,4 +1,4 @@
-<x-vendor-layout>
+<x-app-layout>
     <x-slot name="title">商品編集</x-slot>
 
     <div class="bg-white rounded-lg shadow-md p-6">
@@ -105,4 +105,4 @@
             </div>
         </form>
     </div>
-</x-vendor-layout>
+</x-app-layout>

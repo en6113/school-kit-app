@@ -32,8 +32,13 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
         ]);
 
     //注文関連
-    Route::patch('/orders/{id}', [OrderController::class, 'cancel'])->name('order.cancel');
-    Route::resource('orders', OrderController::class)->only(['index', 'create', 'store', 'show']);
+    Route::patch('/orders/{id}', [OrderController::class, 'cancel'])->name('orders.cancel');
+    Route::resource('orders', OrderController::class)->only(['index', 'create', 'store', 'show'])->names([
+        'index' => 'orders.index',
+        'create' => 'orders.create',
+        'store' => 'orders.store',
+        'show' => 'orders.show',
+    ]);
 });
 
 /* --- 業者専用（要ログイン） --- */

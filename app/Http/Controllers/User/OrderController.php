@@ -9,17 +9,18 @@ use App\Models\OrderDetail;
 use App\Models\Cart;
 use App\Models\CartDetail;
 use App\Models\Product;
+use App\Models\ProductSize;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
-use App\Http\Requests\OrderRequest;
+use App\Http\Requests\User\OrderRequest;
 
 class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('products')->get();
+        $orders = Order::where('user_id', auth()->id())->with('products')->get();
 
-        return view('orders.index', compact('orders'));
+        return view('user.orders.index', compact('orders'));
     }
 
     public function show(string $id)
@@ -29,7 +30,7 @@ class OrderController extends Controller
             'details.productSize',
             ]);
 
-        return view('orders.show', compact('order'));
+        return view('user.orders.show', compact('order'));
     }
 
     public function create()
@@ -41,7 +42,7 @@ class OrderController extends Controller
         $cartDetails = $cart ? $cart->cartDetails : collect();
 
         // 注文確認画面に、これから注文する内容（カートの中身）を渡す
-        return view('orders.create', compact('cartDetails', 'totalAmount'));
+        return view('user.orders.create', compact('cartDetails', 'totalAmount'));
     }
 
     public function store(OrderRequest $request)
@@ -65,16 +66,32 @@ class OrderController extends Controller
                 $cartDetails = $cart->cartDetails;
 
                 foreach ($cartDetails as $detail) {
-                    // 2. 在庫チェック ＆ ロック
-                    // lockForUpdate() で他からの更新を一時ブロック
-                    $product = Product::where('id', $detail->product_id)->lockForUpdate()->first();
+                    // 1. サイズ展開がある場合 (product_size_id が存在する場合)
+                    if ($detail->product_size_id) {
+                        $productSize = ProductSize::where('id', $detail->product_size_id)
+                            ->lockForUpdate()
+                            ->first();
 
-                    if ($product->stock < $detail->quantity) {
-                        throw new \Exception("商品「{$product->name}」の在庫が足りません。");
+                        if (!$productSize || $productSize->stock < $detail->quantity) {
+                            throw new \Exception("商品「{$detail->product->name}」の指定サイズの在庫が足りません。");
+                        }
+
+                        // ProductSizeテーブルの stock を減らす
+                        $productSize->decrement('stock', $detail->quantity);
+
+                    } else {
+                        // 2. サイズ展開がない場合
+                        $product = Product::where('id', $detail->product_id)
+                            ->lockForUpdate()
+                            ->first();
+
+                        if (!$product || $product->total_stock < $detail->quantity) {
+                            throw new \Exception("商品「{$product->name}」の在庫が足りません。");
+                        }
+
+                        // productsテーブルの total_stock を減らす
+                        $product->decrement('total_stock', $detail->quantity);
                     }
-
-                    // 3. 在庫を減らす
-                    $product->decrement('stock', $detail->quantity);
                 }
 
                 // 4. 注文レコードの作成
@@ -105,7 +122,7 @@ class OrderController extends Controller
             Cart::where('user_id', auth()->id())->delete();
 
             // 7. 完了後、注文一覧ページへリダイレクト
-            return redirect()->route('orders.index')->with('success', '注文を確定しました！');
+            return redirect()->route('user.orders.index')->with('success', '注文を確定しました！');
 
         } catch (\Exception $e) {
             // エラー時は自動でロールバックされる
@@ -123,7 +140,7 @@ class OrderController extends Controller
 
         // 2. 権限チェック
         if ($order->user_id !== auth()->id()) {
-            return redirect()->route('orders.index')->with('error', 'この注文を削除する権限がありません。');
+            return redirect()->route('user.orders.index')->with('error', 'この注文を削除する権限がありません。');
         }
 
         // 3. ステータスチェック
@@ -137,14 +154,21 @@ class OrderController extends Controller
                 // 5. 在庫を元に戻す
                 foreach ($order->details as $detail) {
                     // $detail->product は OrderDetails モデルから Product モデルへのリレーション
-                    $detail->product()->increment('stock', $detail->quantity);
+                    if ($detail->product_size_id) {
+                        // サイズ展開がある場合：ProductSizeテーブルの stock を増やす
+                        \App\Models\ProductSize::where('id', $detail->product_size_id)
+                            ->increment('stock', $detail->quantity);
+                    } else {
+                        // サイズ展開がない場合：Productテーブルの total_stock を増やす
+                        $detail->product()->increment('total_stock', $detail->quantity);
+                    }
                 }
 
                 // 6. 注文の削除(ステータスをキャンセルに変更)
                 $order->update(['status' => 0]);
             });
 
-            return redirect()->route('orders.index')->with('success', '注文をキャンセルしました。');
+            return redirect()->route('user.orders.index')->with('success', '注文をキャンセルしました。');
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'キャンセル処理に失敗しました。');
