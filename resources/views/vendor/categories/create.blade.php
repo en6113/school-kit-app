@@ -1,4 +1,4 @@
-<x-vendor-layout>
+<x-app-layout>
     <x-slot name="title">カテゴリー登録</x-slot>
 
     <div class="bg-white rounded-lg shadow-md p-6">
@@ -29,4 +29,4 @@
             </div>
         </form>
     </div>
-</x-vendor-layout>
+</x-app-layout>

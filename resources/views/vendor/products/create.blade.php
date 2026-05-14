@@ -1,4 +1,4 @@
-<x-vendor-layout>
+<x-app-layout>
     @if ($errors->any())
         <div style="color: red;">
             <ul>
@@ -90,4 +90,4 @@
             </div>
         </form>
     </div>
-</x-vendor-layout>
+</x-app-layout>
