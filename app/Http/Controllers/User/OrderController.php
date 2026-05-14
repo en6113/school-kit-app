@@ -122,7 +122,7 @@ class OrderController extends Controller
             Cart::where('user_id', auth()->id())->delete();
 
             // 7. 完了後、注文一覧ページへリダイレクト
-            return redirect()->route('user.orders.index')->with('success', '注文を確定しました！');
+            return redirect()->route('orders.index')->with('success', '注文を確定しました！');
 
         } catch (\Exception $e) {
             // エラー時は自動でロールバックされる
@@ -140,7 +140,7 @@ class OrderController extends Controller
 
         // 2. 権限チェック
         if ($order->user_id !== auth()->id()) {
-            return redirect()->route('user.orders.index')->with('error', 'この注文を削除する権限がありません。');
+            return redirect()->route('orders.index')->with('error', 'この注文を削除する権限がありません。');
         }
 
         // 3. ステータスチェック
@@ -168,7 +168,7 @@ class OrderController extends Controller
                 $order->update(['status' => 0]);
             });
 
-            return redirect()->route('user.orders.index')->with('success', '注文をキャンセルしました。');
+            return redirect()->route('orders.index')->with('success', '注文をキャンセルしました。');
 
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'キャンセル処理に失敗しました。');
