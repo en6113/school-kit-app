@@ -22,8 +22,9 @@ class User extends Authenticatable
         'email',
         'email_verified_at',
         'password',
-        'address',
-        'child_name',
+        'role',//管理者との区別用
+        'address',//郵送配達の際に必要となるが、今回は実装していない
+        'child_name',//学校受取の場合に必要となるが、今回は実装していない
     ];
 
     /**
@@ -33,6 +34,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'role',
         'address',
         'child_name',
     ];

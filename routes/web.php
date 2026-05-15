@@ -5,7 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\StarterKitController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\OrderController;
-use App\Http\Controllers\Vendor\CategoryController;
+use App\Http\Controllers\CategoryController;
 
 // 一般ユーザー用認証
 require __DIR__ . '/user/auth.php';
@@ -13,7 +13,7 @@ require __DIR__ . '/user/auth.php';
 // 業者用認証
 require __DIR__ . '/vendor/vendor_auth.php';
 
-/* --- 一般ユーザーと業者共有（要ログイン） --- */
+/* 共有ルート(管理者、一般ユーザー、業者)*/
 Route::middleware(['auth:web,vendor', 'verified'])->group(function () {
     //商品関連（一覧と詳細のみ）
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
@@ -24,7 +24,13 @@ Route::middleware(['auth:web,vendor', 'verified'])->group(function () {
     Route::get('starterKits/{starterKit}', [StarterKitController::class, 'show'])->name('starterKits.show');
 });
 
-/* --- 一般ユーザー専用（要ログイン） --- */
+/* 管理者用ルート*/
+Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('categories', CategoryController::class);
+    Route::resource('starterKits', StarterKitController::class)->except('index', 'show');
+});
+
+/* 一般ユーザー専用ルート */
 Route::middleware(['auth:web', 'verified'])->group(function () {
     // カート関連
     Route::post('cart/add-kit', [CartController::class, 'storeKit'])->name('cart.add_kit');
@@ -47,11 +53,7 @@ Route::middleware(['auth:web', 'verified'])->group(function () {
     ]);
 });
 
-/* --- 業者専用（要ログイン） --- */
+/* 業者専用ルート */
 Route::middleware('auth:vendor')->prefix('vendor')->name('vendor.')->group(function () {
-    Route::resource('categories', CategoryController::class);
-
     Route::resource('products', ProductController::class)->except(['index','show']);
-
-    Route::resource('starterKits', StarterKitController::class)->except(['index', 'show']);
 });
