@@ -1,7 +1,7 @@
 <x-app-layout>
-    <x-slot name="title">スターターキット</x-slot>
+    <x-slot name="title">スクールキット</x-slot>
 
-    <h1 class="text-2xl font-bold mb-6">スターターキット一覧</h1>
+    <h1 class="text-2xl font-bold mb-6">スクールキット一覧</h1>
 
     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
         @forelse($starterKits as $kit)
@@ -22,13 +22,13 @@
                 </div>
 
 
-                {{-- 編集・削除リンク(作成した業者のみ) --}}
+                {{-- 編集・削除リンク(管理者のみ) --}}
                 @auth('vendor')
                     @if($kit->vendor_id === auth('vendor')->id())
                         <div class="" flex gap-2">
-                            <a href="{{ route('vendor.starterKits.edit', $kit->id) }}"
+                            <a href="{{ route('admin.starterKits.edit', $kit->id) }}"
                                 class="bg-gray-100 px-3 py-1 rounded text-sm hover:bg-gray-200">編集</a>
-                            <form action="{{ route('vendor.starterKits.destroy', $kit->id) }}" method="POST"
+                            <form action="{{ route('admin.starterKits.destroy', $kit->id) }}" method="POST"
                                 onsubmit="return confirm('本当に削除しますか？');">
                                 @csrf
                                 @method('DELETE')

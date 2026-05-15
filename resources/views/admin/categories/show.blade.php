@@ -5,7 +5,7 @@
         {{-- ヘッダー --}}
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">{{ $category->name }}</h1>
-            <a href="{{ route('categories.index') }}" class="text-blue-500 hover:text-blue-600">
+            <a href="{{ route('admin.categories.index') }}" class="text-blue-500 hover:text-blue-600">
                 ← 一覧に戻る
             </a>
         </div>

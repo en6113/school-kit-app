@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Vendor;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Vendor\CategoryRequest;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 
 class CategoryController extends Controller
@@ -15,7 +14,7 @@ class CategoryController extends Controller
     {
         $categories = Category::withCount('products')->orderBy('created_at', 'desc')->get();
 
-        return view('vendor.categories.index', compact('categories'));
+        return view('admin.categories.index', compact('categories'));
     }
 
     /**
@@ -23,7 +22,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('vendor.categories.create');
+        return view('admin.categories.create');
     }
 
     /**
@@ -33,7 +32,7 @@ class CategoryController extends Controller
     {
         Category::create($request->validated());
 
-        return redirect()->route('vendor.categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'カテゴリーを作成しました。');
     }
 
@@ -44,7 +43,7 @@ class CategoryController extends Controller
     {
         $category->load('products');
 
-        return view('vendor.categories.show', compact('category'));
+        return view('admin.categories.show', compact('category'));
     }
 
     /**
@@ -52,7 +51,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        return view('vendor.categories.edit', compact('category'));
+        return view('admin.categories.edit', compact('category'));
     }
 
     /**
@@ -62,7 +61,7 @@ class CategoryController extends Controller
     {
         $category->update($request->validated());
 
-        return redirect()->route('vendor.categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'カテゴリーを更新しました。');
     }
 
@@ -73,13 +72,13 @@ class CategoryController extends Controller
     {
         // カテゴリーに紐づく商品がある場合は削除不可
         if ($category->products()->count() > 0) {
-            return redirect()->route('vendor.categories.index')
+            return redirect()->route('admin.categories.index')
                 ->with('error', '商品が紐づいているカテゴリーは削除できません。');
         }
 
         $category->delete();
 
-        return redirect()->route('vendor.categories.index')
+        return redirect()->route('admin.categories.index')
             ->with('success', 'カテゴリーを削除しました。');
     }
 }

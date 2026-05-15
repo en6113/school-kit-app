@@ -5,7 +5,7 @@
         {{-- ヘッダー --}}
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-gray-800">カテゴリー一覧</h1>
-            <a href="{{ route('vendor.categories.create') }}"
+            <a href="{{ route('admin.categories.create') }}"
                 class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
                 新規登録
             </a>
@@ -24,11 +24,11 @@
                         </p>
                     </div>
                     <div class="flex space-x-2">
-                        <a href="{{ route('vendor.categories.edit', $category) }}"
+                        <a href="{{ route('admin.categories.edit', $category) }}"
                             class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-1 rounded text-sm">
                             編集
                         </a>
-                        <form action="{{ route('vendor.categories.destroy', $category) }}" method="POST"
+                        <form action="{{ route('admin.categories.destroy', $category) }}" method="POST"
                             onsubmit="return confirm('本当に削除しますか？');">
                             @csrf
                             @method('DELETE')
