@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
-class StarterKit extends Model
+class SchoolKit extends Model
 {
     use HasFactory;
 
@@ -17,20 +17,20 @@ class StarterKit extends Model
     ];
 
     /**
-     * このスターターキットに属する商品を直接取得
+     * このスクールキットに属する商品を直接取得
      */
     public function products(): BelongsToMany
     {
         // belongsToMany(相手のモデル名, 中間テーブル名, 自分のIDを示すカラム, 相手のIDを示すカラム)
-        return $this->belongsToMany(Product::class, 'starter_kit_items', 'starter_kit_id', 'product_id');
+        return $this->belongsToMany(Product::class, 'school_kit_items', 'school_kit_id', 'product_id');
     }
 
     //キットイメージ画像を表示させる
     public function getImageUrl()
     {
-        // image_url が空、または '#' の場合はデフォルト画像を返す
-        if (!$this->image_url || $this->image_url === '#') {
-            return asset('images/no-image.png'); // 公開フォルダに用意する予定
+        // image_url が空の場合はデフォルト画像を返す
+        if (!$this->image_url || $this->image_url->isNotEmpty()) {
+            return asset('images/no-image.png');
         }
 
         return asset('storage/' . $this->image_url);

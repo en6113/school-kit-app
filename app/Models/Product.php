@@ -85,11 +85,11 @@ class Product extends Model
     }
 
     /**
-     * この商品が属するスターターキットを取得
+     * この商品が属するスクールキットを取得
      */
-    public function starterKits(): BelongsToMany
+    public function schoolKits(): BelongsToMany
     {
-        return $this->belongsToMany(StarterKit::class, 'starter_kit_items');
+        return $this->belongsToMany(SchoolKit::class, 'school_kit_items');
     }
     /**
      * カート明細を取得
