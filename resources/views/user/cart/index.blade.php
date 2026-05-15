@@ -27,7 +27,7 @@
                                 <h2 class="font-bold text-lg">{{ $detail->product->name }}</h2>
                                 <p class="text-sm text-gray-600">
                                     @if($detail->productSize)
-                                        サイズ: {{ $detail->productSize->size->size_name }}cm /
+                                        サイズ: {{ $detail->productSize->size->size_name }} /
                                     @endif
                                     単価: ¥{{ number_format($detail->product->price) }}
                                 </p>

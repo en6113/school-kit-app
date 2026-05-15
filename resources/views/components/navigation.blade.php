@@ -12,11 +12,9 @@
 
                 {{-- 【Vendor用ナビ】 --}}
                 <div class="flex items-center space-x-6 ml-6 mr-auto">
-                    {{-- ルートが未作成なので一時的にコメントアウト
-                        <a href="{{ route('starterkits.index') }}"
-                        class="text-gray-300 hover:text-white text-sm font-medium">スクールキット一覧</a>
-                    --}}
                     @auth('vendor')
+                        <a href="{{ route('starterKits.index') }}"
+                        class="text-gray-300 hover:text-white text-sm font-medium">スクールキット一覧</a>
                         <a href="{{ route('vendor.products.create') }}"
                             class="text-gray-300 hover:text-white text-sm font-medium">＋商品登録</a>
                         <a href="{{ route('vendor.categories.index') }}"
@@ -41,10 +39,8 @@
 
                 {{-- 【User用ナビ】 --}}
                 <div class="flex items-center space-x-6 ml-6 mr-auto">
-                    {{-- ルートが未作成なので一時的にコメントアウト
-                    <a href="{{ route('starterkits.index') }}" class="text-gray-300 hover:text-white text-sm font-medium">スクールキット一覧</a>
-                    --}}
                     @auth('web')
+                        <a href="{{ route('starterKits.index') }}" class="text-gray-300 hover:text-white text-sm font-medium">スクールキット一覧</a>
                         <a href="{{ route('cart.index') }}" class="text-gray-300 hover:text-white text-sm font-medium">買い物かご</a>
                         <a href="{{ route('orders.index') }}" class="text-gray-300 hover:text-white text-sm font-medium">注文履歴</a>
                     @endauth

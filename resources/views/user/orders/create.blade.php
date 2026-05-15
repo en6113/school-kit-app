@@ -20,7 +20,7 @@
                         <tr class="border-b last:border-0">
                             <td class="py-3">{{ $detail->product->name }}</td>
                             <td class="py-3">
-                                @if($detail->productSize){{ $detail->productSize->size->size_name ?? '-' }}cm</td>
+                                @if($detail->productSize){{ $detail->productSize->size->size_name ?? '-' }}</td>
                                 @endif
                             <td class="py-3">{{ $detail->quantity }}</td>
                             <td class="py-3">¥{{ number_format($detail->product->price) }}</td>

@@ -47,7 +47,7 @@
                                 <label class="block font-bold mb-2">サイズ選択</label>
                                 <select name="product_size_id" class="w-full border-gray-300 rounded">
                                     @foreach($product->productSizes as $productSize)
-                                        <option value="{{ $productSize->id }}">{{ $productSize->size->size_name }}cm (在庫: {{ $productSize->stock }})
+                                        <option value="{{ $productSize->id }}">{{ $productSize->size->size_name }} (在庫: {{ $productSize->stock }})
                                         </option>
                                     @endforeach
                                 </select>

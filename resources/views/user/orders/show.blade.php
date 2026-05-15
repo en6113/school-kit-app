@@ -26,7 +26,7 @@
                         <div>
                             <p class="font-bold">{{ $detail->product->name }}</p>
                             <p class="text-sm text-gray-500">
-                                サイズ: {{ $detail->productSize->size->size_name ?? '-' }}cm/単価: ¥{{ number_format($detail->price_at_purchase) }} / 数量:
+                                サイズ: {{ $detail->productSize->size->size_name ?? '-' }}/単価: ¥{{ number_format($detail->price_at_purchase) }} / 数量:
                                 {{ $detail->quantity }}
                             </p>
                         </div>
