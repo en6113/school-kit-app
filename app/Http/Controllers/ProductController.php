@@ -10,7 +10,7 @@ use App\Models\Category;
 use App\Models\ProductImage;
 use App\Models\Size;
 use App\Models\ProductSize;
-use App\Models\StarterKit;
+use App\Models\SchoolKit;
 
 
 class ProductController extends Controller
@@ -48,9 +48,8 @@ class ProductController extends Controller
     {
         $categories = Category::all();
         $sizes = Size::all();
-        $starterKits = StarterKit::all();
 
-        return view('vendor.products.create', compact('categories', 'sizes', 'starterKits'));
+        return view('vendor.products.create', compact('categories', 'sizes'));
     }
 
     /**
@@ -93,7 +92,6 @@ class ProductController extends Controller
     {
         $product = Product::with('categories','sizes')->findOrFail($id);
         $categories = Category::all();
-        $starterKits = StarterKit::all();
 
         //モデルのgetSizeTypeAttributeアクセサを使用
         $type = $product->size_type;
@@ -103,7 +101,7 @@ class ProductController extends Controller
 
         $stocks = $product->productSizes->pluck('stock', 'size_id')->toArray();
 
-        return view('vendor.products.edit', compact('product','categories','starterKits','sizeOptions','stocks',));
+        return view('vendor.products.edit', compact('product','categories','sizeOptions','stocks',));
     }
 
     /**

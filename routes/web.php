@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
-use App\Http\Controllers\StarterKitController;
+use App\Http\Controllers\SchoolKitController;
 use App\Http\Controllers\User\CartController;
 use App\Http\Controllers\User\OrderController;
 use App\Http\Controllers\CategoryController;
@@ -20,14 +20,14 @@ Route::middleware(['auth:web,vendor', 'verified'])->group(function () {
     Route::get('products/{product}', [ProductController::class, 'show'])->name('products.show');
 
     //スターターキット関連（一覧と詳細のみ）
-    Route::get('starterKits',[StarterKitController::class, 'index'])->name('starterKits.index');
-    Route::get('starterKits/{starterKit}', [StarterKitController::class, 'show'])->name('starterKits.show');
+    Route::get('schoolKits',[SchoolKitController::class, 'index'])->name('schoolKits.index');
+    Route::get('schoolKits/{schoolKit}', [SchoolkitController::class, 'show'])->name('schoolKits.show');
 });
 
 /* 管理者用ルート*/
 Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('categories', CategoryController::class);
-    Route::resource('starterKits', StarterKitController::class)->except('index', 'show');
+    Route::resource('schoolKits', SchoolKitController::class)->except('index', 'show');
 });
 
 /* 一般ユーザー専用ルート */

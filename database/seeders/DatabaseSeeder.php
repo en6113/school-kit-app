@@ -4,18 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Vendor;
-use App\Models\Category;
-use App\Models\Product;
-use App\Models\ProductImage;
-use App\Models\Size;
-use App\Models\StarterKit;
-use App\Models\StarterKitItem;
-use App\Models\Cart;
-use App\Models\CartItem;
-use App\Models\Order;
-use App\Models\OrderItem;
 
 class DatabaseSeeder extends Seeder
 {
@@ -33,8 +21,8 @@ class DatabaseSeeder extends Seeder
             ProductImageSeeder::class,
             SizeSeeder::class,
             ProductSizeSeeder::class,
-            StarterKitSeeder::class,
-            StarterKitItemSeeder::class,
+            SchoolKitSeeder::class,
+            SchoolKitItemSeeder::class,
             CartSeeder::class,
             OrderSeeder::class,
         ]);

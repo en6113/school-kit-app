@@ -1,13 +1,13 @@
 <x-app-layout>
-    <x-slot name="title">{{ $starterKitItem->name }}</x-slot>
+    <x-slot name="title">{{ $schoolKitItem->name }}</x-slot>
 
-    <h1 class="text-2xl font-bold mb-4">{{ $starterKitItem->name }}の内容物</h1>
+    <h1 class="text-2xl font-bold mb-4">{{ $schoolKitItem->name }}の内容物</h1>
 
     <form action="{{ route('cart.add_kit') }}" method="POST">
         @csrf
 
         <div class="grid grid-cols-1 gap-6">
-            @forelse($starterKitItem->products as $product)
+            @forelse($schoolKitItem->products as $product)
                 @php $index = $loop->index; @endphp
 
                 <div class="md:flex mt-4">

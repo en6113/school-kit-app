@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('starter_kit_items', function (Blueprint $table) {
+        Schema::create('school_kit_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('starter_kit_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('school_kit_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('starter_kit_items');
+        Schema::dropIfExists('school_kit_items');
     }
 };
