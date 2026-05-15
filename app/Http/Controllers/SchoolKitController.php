@@ -26,8 +26,6 @@ class SchoolKitController extends Controller
     public function store(SchoolKitRequest $request)
     {
         $validated = $request->validated();
-        $validated['user_id'] = auth()->id();
-
         $schoolKit = SchoolKit::create($validated);
 
         //キットに商品を保存（中間テーブルに保存する）
@@ -53,8 +51,9 @@ class SchoolKitController extends Controller
     public function edit(string $id)
     {
         $schoolKit = SchoolKit::with('products')->findOrFail($id);
+        $products = Product::all();
 
-        return view('admin.schoolKits.edit', compact('schoolKit'));
+        return view('admin.schoolKits.edit', compact('schoolKit','products'));
     }
 
     public function update(SchoolKitRequest $request, string $id)
@@ -79,12 +78,8 @@ class SchoolKitController extends Controller
     public function destroy(string $id)
     {
         $schoolKit = SchoolKit::findOrFail($id);
-
-        if ($schoolKit->user_id !== auth()->id()) {
-            return redirect()->route('schoolKits.index')->with('error', 'このスクールキットを削除する権限がありません。');
-        }
-
         $schoolKit->delete();
+
         return redirect()->route('schoolKits.index')->with('success', 'スクールキットを削除しました。');
     }
 }

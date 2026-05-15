@@ -62,7 +62,12 @@
                 <div class="grid grid-cols-3 gap-2 border p-3 rounded">
                     @foreach($categories as $category)
                         <label class="flex items-center text-sm">
-                            <input type="checkbox" name="category_id[]" value="{{ $category->id }}" class="mr-2" {{ $product->categories->contains($category) ? 'checked' : '' }}>
+                            <input type="checkbox" name="category_id[]" value="{{ $category->id }}" class="mr-2" {{ $product->categories->contains($category) ? 'checked' : '' }}
+                                @checked(
+                                    (is_array(old('category_id')) && in_array($category->id, old('category_id'))) ||
+                                    (!old('category_id') && $product->categories->contains($category->id))
+                                )
+                            >
                             {{ $category->name }}
                         </label>
                     @endforeach
