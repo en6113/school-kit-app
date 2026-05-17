@@ -91,9 +91,13 @@ class ProductController extends Controller
     public function edit(string $id)
     {
         $product = Product::with('categories','sizes')->findOrFail($id);
+
+        $this->authorize('update', $product);
+
         $categories = Category::all();
 
-        //モデルのgetSizeTypeAttributeアクセサを使用
+        /*サイズ展開がある場合、編集画面でサイズごとの在庫を入力できるようにしている
+        モデルのgetSizeTypeAttributeアクセサを使用 */
         $type = $product->size_type;
         $sizeOptions = $type
             ? Size::where('type', $type)->get()
@@ -111,7 +115,8 @@ class ProductController extends Controller
     {
         $product = Product::findOrFail($id);
         $validated = $request->validated();
-        $validated['vendor_id'] = auth()->id();
+
+        $this->authorize('update', $product);
 
         $product->update($validated);
 
@@ -140,6 +145,8 @@ class ProductController extends Controller
     public function destroy(string $id)
     {
         $product = Product::findOrFail($id);
+
+        $this->authorize('delete', $product);
 
         if($product->vendor_id !== auth()->id()) {
             return redirect()->route('products.index')->with('error', 'この商品を削除する権限がありません。');
