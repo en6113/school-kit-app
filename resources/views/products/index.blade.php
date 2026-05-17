@@ -38,7 +38,7 @@
                             @endforeach
                         @endif
                     </div>
-                    
+
                     {{-- 基本情報 --}}
                     <h2 class="font-bold text-lg mb-1">{{ $product->name }}</h2>
                     <p class="text-red-600 font-semibold">¥{{ number_format($product->price) }}</p>
@@ -64,23 +64,27 @@
                             class="text-blue-500 hover:underline text-sm">詳細を見る</a>
 
                         {{-- 編集・削除リンク(業者のみ) --}}
-                        @auth('vendor')
-                            @if($product->vendor_id === auth('vendor')->id())
-                                <div class="" flex gap-2">
-                                    {{-- 編集 --}}
-                                    <a href="{{ route('vendor.products.edit', $product->id) }}"
-                                        class="bg-gray-100 px-3 py-1 rounded text-sm hover:bg-gray-200">編集</a>
-                                    {{-- 削除 --}}
-                                    <form action="{{ route('vendor.products.destroy', $product->id) }}" method="POST"
-                                        onsubmit="return confirm('本当に削除しますか？');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-gray-200">削除</button>
-                                    </form>
-                                </div>
-                            @endif
-                        @endauth
+                        <div class="" flex gap-2">
+                            {{-- 編集 --}}
+                            @can('update', $product)
+                                <a href="{{ route('vendor.products.edit', $product->id) }}"
+                                    class="text-sm text-blue-500 hover:underline">
+                                    編集
+                                </a>
+                            @endcan
+                            {{-- 削除 --}}
+                            @can('delete', $product)
+                                <form action="{{ route('vendor.products.destroy', $product->id) }}" method="POST"
+                                    onsubmit="return confirm('本当に削除しますか？');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-gray-200">
+                                        削除
+                                    </button>
+                                </form>
+                            @endcan
+                        </div>
                     </div>
                 </div>
             </div>

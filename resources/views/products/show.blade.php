@@ -73,26 +73,30 @@
                         </div>
                     </form>
         
-                <!-- 編集・削除リンク(登録した業者のみに表示) -->
-                <div class="mt-8 border-t pt-4">
-                    @auth('vendor')
-                        @if($product->vendor_id === auth('vendor')->id())
-                            <div class="flex gap-2">
-                                {{-- 編集 --}}
+                    <!-- 編集・削除リンク(登録した業者のみに表示) -->
+                    <div class="mt-8 border-t pt-4">
+                        <div class="flex gap-2">
+                            {{-- 編集 --}}
+                            @can('update', $product)
                                 <a href="{{ route('vendor.products.edit', $product->id) }}"
-                                    class="text-sm text-blue-500 hover:underline">編集する</a>
-                                {{-- 削除 --}}
+                                    class="text-sm text-blue-500 hover:underline">
+                                    編集
+                                </a>
+                            @endcan
+                            {{-- 削除 --}}
+                            @can('delete', $product)
                                 <form action="{{ route('vendor.products.destroy', $product->id) }}" method="POST"
                                     onsubmit="return confirm('本当に削除しますか？');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
-                                        class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-gray-200">削除する
+                                        class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-gray-200">
+                                        削除
                                     </button>
                                 </form>
-                            </div>
-                        @endif
-                    @endauth
+                            @endcan
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
