@@ -3,20 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CartRequest;
 use App\Models\Cart;
 use App\Models\CartDetail;
 
 class CartController extends Controller
 {
     //個別商品用、ルート名は'cart.add'
-    public function store(Request $request)
+    public function store(CartRequest $request)
     {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'product_size_id' => 'nullable|exists:product_sizes,id',
-            'quantity' => 'required|integer|min:1',
-        ]);
-
         $userId = auth()->id();
         // ユーザーの「現在のカート」を取得、なければ作成
         $cart = Cart::firstOrCreate(['user_id' => $userId]);
@@ -44,15 +39,8 @@ class CartController extends Controller
     }
 
     //スターターキット用、ルート名は'cart.add_kit'
-    public function storeKit(Request $request)
+    public function storeKit(CartRequest $request)
     {
-        $request->validate([
-            'products' => 'required|array',
-            'products.*.product_id' => 'required|exists:products,id',
-            'products.*.product_size_id' => 'nullable|exists:product_sizes,id',
-            'products.*.quantity' => 'required|integer|min:1',
-        ]);
-
         $userId = auth()->id();
         $cart = Cart::firstOrCreate(['user_id' => $userId]);
 

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests\Vendor\ProductRequest;
+use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Product;
 use App\Models\Category;
@@ -47,9 +47,8 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        $sizes = Size::all();
 
-        return view('vendor.products.create', compact('categories', 'sizes'));
+        return view('vendor.products.create', compact('categories'));
     }
 
     /**
@@ -62,9 +61,9 @@ class ProductController extends Controller
 
         $product = Product::create($validated);
 
-        //サイズ展開の保存（中間テーブルに保存する）
-        if ($request->has('product_sizes')) {
-            $product->sizes()->attach($request->product_sizes);
+        //商品画像の保存（中間テーブルに保存する）
+        if ($request->has('image_url')) {
+            $product->productImages()->attach($request->image_url);
         }
 
         //カテゴリーの保存（中間テーブルに保存する）
