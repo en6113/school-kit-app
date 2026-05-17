@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\User;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -12,7 +11,7 @@ use App\Models\Product;
 use App\Models\ProductSize;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
-use App\Http\Requests\User\OrderRequest;
+use App\Http\Requests\OrderRequest;
 
 class OrderController extends Controller
 {

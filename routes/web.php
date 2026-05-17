@@ -3,8 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SchoolKitController;
-use App\Http\Controllers\User\CartController;
-use App\Http\Controllers\User\OrderController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryController;
 
 // 一般ユーザー用認証
