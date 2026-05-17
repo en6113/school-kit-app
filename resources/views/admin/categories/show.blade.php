@@ -12,16 +12,16 @@
 
         {{-- このカテゴリーのアイテム一覧 --}}
         <h2 class="text-lg font-semibold text-gray-700 mb-4">
-            このカテゴリーのアイテム（{{ $category->items->count() }}件）
+            このカテゴリーのアイテム（{{ $category->products->count() }}件）
         </h2>
 
-        @forelse($category->items as $item)
+        @forelse($category->products as $product)
             <div class="border-b border-gray-200 py-3">
                 <a href="{{ route('items.show', $item) }}" class="text-blue-500 hover:text-blue-600">
-                    {{ $item->name }}
+                    {{ $product->name }}
                 </a>
                 <span class="ml-2 text-sm text-gray-500">
-                    価格: {{ $item->price }}
+                    価格: {{ $product->price }}
                 </span>
             </div>
         @empty
