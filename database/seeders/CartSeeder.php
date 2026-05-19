@@ -14,7 +14,6 @@ class CartSeeder extends Seeder
      */
     public function run(): void
     {
-        //CartSeeder
         $users = User::factory()->count(5)->create();
 
         foreach ($users as $user) {

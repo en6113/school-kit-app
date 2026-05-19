@@ -34,23 +34,18 @@ Route::middleware(['auth', 'can:admin'])->prefix('admin')->name('admin.')->group
 Route::middleware(['auth:web', 'verified'])->group(function () {
     // カート関連
     Route::post('cart/add-kit', [CartController::class, 'storeKit'])->name('cart.add_kit');
-    Route::resource('cart',CartController::class)->only(['index','store','destroy'])
+    Route::resource('cart',CartController::class)->only(['index', 'store', 'destroy'])
         ->names([
             'store' => 'cart.add',
-            'destroy' => 'cart.remove',
         ])
+        // ルートモデルバインディングのパラメータ名を変更
         ->parameters([
-            'cart' => 'cartDetail', // ルートモデルバインディングのパラメータ名を変更
+            'cart' => 'cartDetail',
         ]);
 
     //注文関連
     Route::patch('/orders/{id}', [OrderController::class, 'cancel'])->name('orders.cancel');
-    Route::resource('orders', OrderController::class)->only(['index', 'create', 'store', 'show'])->names([
-        'index' => 'orders.index',
-        'create' => 'orders.create',
-        'store' => 'orders.store',
-        'show' => 'orders.show',
-    ]);
+    Route::resource('orders', OrderController::class)->only(['index', 'create', 'store', 'show']);
 });
 
 /* 業者専用ルート */

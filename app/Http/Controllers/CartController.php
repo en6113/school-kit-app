@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Http\Requests\CartRequest;
+use App\Http\Requests\CartKitRequest;
 use App\Models\Cart;
 use App\Models\CartDetail;
 
@@ -39,7 +39,7 @@ class CartController extends Controller
     }
 
     //スターターキット用、ルート名は'cart.add_kit'
-    public function storeKit(CartRequest $request)
+    public function storeKit(CartKitRequest $request)
     {
         $userId = auth()->id();
         $cart = Cart::firstOrCreate(['user_id' => $userId]);
