@@ -48,7 +48,7 @@
                             </div>
 
                             <!-- 削除ボタン -->
-                            <form action="{{ route('cart.remove', $detail->id) }}" method="POST" onsubmit="return confirm('カートから削除しますか？')">
+                            <form action="{{ route('cart.destroy', $detail->id) }}" method="POST" onsubmit="return confirm('カートから削除しますか？')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
