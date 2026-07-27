@@ -39,7 +39,7 @@
                 <div class="flex items-center space-x-6 ml-6 mr-auto">
                     @auth('web')
                         <a href="{{ route('schoolKits.index') }}" class="text-gray-300 hover:text-white text-sm font-medium">キット一覧</a>
-                        <a href="{{ route('cart.index') }}" class="text-gray-300 hover:text-white text-sm font-medium">買い物かご</a>
+                        <a href="{{ route('cart.index') }}" class="text-gray-300 hover:text-white text-sm font-medium">カート</a>
                         <a href="{{ route('orders.index') }}" class="text-gray-300 hover:text-white text-sm font-medium">注文履歴</a>
                         @can('admin')
                             <a href="{{ route('admin.schoolKits.create') }}" class="text-gray-300 hover:text-white text-sm font-medium">＋キット作成</a>

@@ -7,6 +7,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CategoryController;
 
+Route::redirect('/', '/login');
+
 // 一般ユーザー用認証
 require __DIR__ . '/user/auth.php';
 

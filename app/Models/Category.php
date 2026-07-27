@@ -11,15 +11,6 @@ class Category extends Model
     use HasFactory;
 
     /**
-     * 複数代入可能な属性
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'name',
-    ];
-
-    /**
      * このカテゴリーに属する商品を取得
      */
     public function products(): BelongsToMany
