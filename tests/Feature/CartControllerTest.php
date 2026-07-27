@@ -29,16 +29,10 @@ class CartControllerTest extends TestCase
         //Arrange
         $user = User::factory()->create();
         $product = Product::factory()->create();
-        $size = Size::factory()->create();
-        $productSize = ProductSize::factory()->create(
-            ['product_id' => $product->id,
-             'size_id' => $size->id,
-            ]);
 
         //Act
         $response = $this->actingAs($user)->post(route('cart.add'),[
             'product_id' => $product->id,
-            'product_size_id' => $productSize->size_id,
             'quantity' => 2,
         ]);
 
@@ -58,23 +52,16 @@ class CartControllerTest extends TestCase
         $user = User::factory()->create();
         $cart = Cart::factory()->create(['user_id' => $user->id]);
         $product = Product::factory()->create();
-        $size = Size::factory()->create();
-        $productSize = ProductSize::factory()->create(
-            ['product_id' => $product->id,
-             'size_id' => $size->id,
-            ]);
 
         $cartDetail = CartDetail::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
-            'product_size_id' => $productSize->size_id,
             'quantity' => 1,
         ]);
 
         // Act
         $response = $this->actingAs($user)->post(route('cart.add'), [
             'product_id' => $product->id,
-            'product_size_id' => $productSize->size_id,
             'quantity' => 2,
         ]);
 
@@ -89,26 +76,14 @@ class CartControllerTest extends TestCase
         $user = User::factory()->create();
         $productA = Product::factory()->create();
         $productB = Product::factory()->create();
-        $size = Size::factory()->create();
-        $productSizeA = ProductSize::factory()->create([
-            'product_id' => $productA->id,
-            'size_id' => $size->id,
-        ]);
-        $productSizeB = ProductSize::factory()->create([
-            'product_id' => $productB->id,
-            'size_id' => $size->id,
-        ]);
-
 
         //Act
         $response = $this->actingAs($user)->post(route('cart.add_kit'), [
             'products' => [
                 ['product_id' => $productA->id,
-                 'product_size_id' => $productSizeA->size_id,
                  'quantity' => 1],
                 [
                 'product_id' => $productB->id,
-                'product_size_id' => $productSizeB->size_id,
                  'quantity' => 2],
             ]
         ]);
@@ -126,15 +101,9 @@ class CartControllerTest extends TestCase
         $user = User::factory()->create();
         $cart = Cart::factory()->create(['user_id' => $user->id]);
         $product = Product::factory()->create();
-        $size = Size::factory()->create();
-        $productSize = ProductSize::factory()->create([
-            'product_id' => $product->id,
-            'size_id' => $size->id,
-        ]);
         CartDetail::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
-            'product_size_id' => $productSize->size_id,
         ]);
 
         //Act
@@ -152,15 +121,9 @@ class CartControllerTest extends TestCase
         $user = User::factory()->create();
         $cart = Cart::factory()->create(['user_id' => $user->id]);
         $product = Product::factory()->create();
-        $size = Size::factory()->create();
-        $productSize = ProductSize::factory()->create([
-            'product_id' => $product->id,
-            'size_id' => $size->id,
-        ]);
         $cartDetail = CartDetail::factory()->create([
             'cart_id' => $cart->id,
             'product_id' => $product->id,
-            'product_size_id' => $productSize->size_id,
         ]);
 
         //Act
@@ -182,15 +145,9 @@ class CartControllerTest extends TestCase
 
         $cartB = Cart::factory()->create(['user_id' => $userB->id]);
         $product = Product::factory()->create();
-        $size = Size::factory()->create();
-        $productSize = ProductSize::factory()->create([
-            'product_id' => $product->id,
-            'size_id' => $size->id,
-        ]);
         $cartDetailB = CartDetail::factory()->create([
             'cart_id' => $cartB->id,
             'product_id' => $product->id,
-            'product_size_id' => $productSize->size_id,
             ]);
 
         //Act

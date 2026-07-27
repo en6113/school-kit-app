@@ -2,13 +2,15 @@
     <x-slot name="title">商品一覧</x-slot>
 
     <h1 class="text-2xl font-bold mb-6">商品一覧</h1>
+    <p>カテゴリを選択すると、カテゴリの商品に絞ることができます</p>
 
     {{-- カテゴリー絞り込み中の場合に「解除」ボタンを表示 --}}
     @if(request('category'))
         <div class="mb-4">
+            カテゴリー「{{ request('$category->name') }}」で絞り込み中
             <a href="{{ route('products.index') }}"
                 class="text-sm text-gray-600 bg-gray-200 px-3 py-1 rounded-full hover:bg-gray-300">
-                ✕ カテゴリー絞り込みを解除
+                ✕ 絞り込みを解除
             </a>
         </div>
     @endif

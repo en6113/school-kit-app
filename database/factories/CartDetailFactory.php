@@ -22,7 +22,7 @@ class CartDetailFactory extends Factory
         return [
             'cart_id' => Cart::inRandomOrder()->first()?->id ?? Cart::factory(),
             'product_id' => Product::inRandomOrder()->first()?->id ?? Product::factory(),
-            'product_size_id' => ProductSize::inRandomOrder()->first()?->id ?? ProductSize::factory(),
+            'product_size_id' => null,
             'quantity' => fake()->numberBetween(1, 5),
         ];
     }

@@ -16,7 +16,7 @@ class CartDetail extends Model
         'product_size_id',
         'quantity',
     ];
-
+    
     /**
      * この明細が属する商品を紐付け
      */

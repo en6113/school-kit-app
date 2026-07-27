@@ -1,12 +1,6 @@
 <x-app-layout>
     <div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-lg">
-        <h1 class="text-2xl font-bold mb-6 border-b pb-4">買い物かご</h1>
-
-        @if (session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                {{ session('success') }}
-            </div>
-        @endif
+        <h1 class="text-2xl font-bold mb-6 border-b pb-4">カート</h1>
 
         @if($cart && $cart->cartDetails->isNotEmpty())
             <div class="space-y-4">
